@@ -125,7 +125,6 @@ body{
 .benefit-item p strong{color:#fff}
 .your-words{background:rgba(255,255,255,.05);border-left:3px solid #FF4A01;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:6px;font-size:12px;color:rgba(255,255,255,.5);font-style:italic;line-height:1.5}
 
-.placeholder-note{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:12px 16px;font-size:12px;color:rgba(251,191,36,.7);margin-bottom:24px;line-height:1.5;text-align:left}
 .claim-btn{background:#FF4A01;color:#fff;border:none;padding:20px;font-size:18px;font-weight:800;border-radius:14px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 28px rgba(255,74,1,.4);width:100%;font-family:inherit;letter-spacing:.3px}
 .claim-btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(255,74,1,.55)}
 .claim-sub{margin-top:12px;color:rgba(255,255,255,.35);font-size:12px;text-align:center}
@@ -190,7 +189,7 @@ body{
 
   <!-- S1b: Services -->
   <div class="step" id="s1b">
-    <div class="slabel">Step 2 of 8</div>
+    <div class="slabel">Step 2 of 7</div>
     <h2>What services does your agency cover?</h2>
     <p class="sub">Select all that apply.</p>
     <div class="pgrid">
@@ -208,7 +207,7 @@ body{
 
   <!-- S2 -->
   <div class="step" id="s2">
-    <div class="slabel">Step 3 of 8</div>
+    <div class="slabel">Step 3 of 7</div>
     <h2>What is your monthly ad spend per platform?</h2>
     <p class="sub">Fill in your approximate monthly budget for each platform.</p>
     <div class="slist" id="spendList"></div>
@@ -220,7 +219,7 @@ body{
 
   <!-- S3 -->
   <div class="step" id="s3">
-    <div class="slabel">Step 4 of 8</div>
+    <div class="slabel">Step 4 of 7</div>
     <h2>What agency fee are you paying monthly?</h2>
     <p class="sub">Management fee only — not the ad spend.</p>
     <div class="fgrid">
@@ -243,7 +242,7 @@ body{
 
   <!-- S4 -->
   <div class="step" id="s4">
-    <div class="slabel">Step 5 of 8</div>
+    <div class="slabel">Step 5 of 7</div>
     <h2>How is your current agency performing?</h2>
     <p class="sub">Rate each on a scale from 1 to 10.</p>
     <div class="rqs">
@@ -266,21 +265,9 @@ body{
     </div>
   </div>
 
-  <!-- S5 -->
-  <div class="step" id="s5">
-    <div class="slabel">Step 6 of 8</div>
-    <h2>How could this become a 10?</h2>
-    <p class="sub">What would make your agency experience perfect? Be as specific as you'd like.</p>
-    <textarea class="btarea" id="improveBox" placeholder="e.g. Faster reporting, more proactive communication, better results on LinkedIn..."></textarea>
-    <div class="nav">
-      <button class="nbk" onclick="go(4)">← Back</button>
-      <button class="nxt" onclick="go(6)">Continue →</button>
-    </div>
-  </div>
-
   <!-- S6 -->
   <div class="step" id="s6">
-    <div class="slabel">Step 7 of 8</div>
+    <div class="slabel">Step 6 of 7</div>
     <h2>See if you're paying industry standard — and how much you can save.</h2>
     <p class="sub">Your personalised breakdown is one step away.</p>
     <div class="lform">
@@ -293,14 +280,14 @@ body{
       <div class="ff"><label>Phone <span style="color:rgba(255,255,255,.2);text-transform:none;font-size:11px">(optional)</span></label><input type="tel" id="ph" placeholder="+31 6 12 34 56 78"></div>
     </div>
     <div class="nav">
-      <button class="nbk" onclick="go(5)">← Back</button>
+      <button class="nbk" onclick="go(4)">← Back</button>
       <button class="nxt" onclick="showRes()">Show my savings →</button>
     </div>
   </div>
 
   <!-- S7: Results -->
   <div class="step" id="s7">
-    <div class="slabel">Step 8 of 8 — Your personalised overview</div>
+    <div class="slabel">Step 7 of 7 — Your personalised overview</div>
     <div class="res-hero">
       <h2>Here's what you're currently paying</h2>
       <div class="stag" id="stag">You could save €—/month</div>
@@ -330,7 +317,6 @@ body{
       <div id="benefitsList"></div>
     </div>
 
-    <div class="placeholder-note">⚠️ <strong>Internal note:</strong> Offer calculation uses a placeholder formula — to be updated with agreed pricing logic.</div>
     <button class="claim-btn" onclick="window.open('https://calendly.com','_blank')">CLAIM YOUR OFFER →</button>
     <p class="claim-sub">Book a free 30-minute strategy call. No obligations.</p>
   </div>
@@ -378,20 +364,20 @@ function goNext3(){
 function goNext4(){
   const{speed,human,perf}=D.ratings;
   if(!speed||!human||!perf){err('Please rate all three areas.');return;}
-  go(5);
+  go(6);
 }
 
 function startQuiz(){document.getElementById('landing').style.display='none';document.getElementById('quiz').style.display='block';go(1);}
 
-const stepOrder=[1,'1b',2,3,4,5,6,7];
+const stepOrder=[1,'1b',2,3,4,6,7];
 function go(n){
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
   document.getElementById('s'+n).classList.add('active');
   const idx=stepOrder.indexOf(n);
-  const pct=Math.round((idx/7)*100);
+  const pct=Math.round((idx/6)*100);
   document.getElementById('pFill').style.width=pct+'%';
   const display=idx+1;
-  document.getElementById('pTxt').textContent='Step '+display+' of 8';
+  document.getElementById('pTxt').textContent='Step '+display+' of 7';
   if(n===2)buildSpend();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -426,7 +412,6 @@ function fmt(n){return'€'+n.toLocaleString('nl-NL')}
 
 function buildBenefits(){
   const {speed,human,perf}=D.ratings;
-  const improve=document.getElementById('improveBox').value.trim();
   const items=[];
 
   // Always included
@@ -442,11 +427,6 @@ function buildBenefits(){
   const scores=[speed,human,perf].filter(s=>s>0);
   if(scores.length&&(scores.reduce((a,b)=>a+b,0)/scores.length)<6){
     items.push({title:'A fresh start with a team that cares',body:'Based on your ratings, your current agency is underperforming. We\'ll make it right from day one.'});
-  }
-
-  // From their own words
-  if(improve){
-    items.push({title:'We heard you',body:null,quote:improve});
   }
 
   const container=document.getElementById('benefitsList');
@@ -475,14 +455,9 @@ function showRes(){
   if(!em||!em.includes('@')){err('Please enter a valid email address.');return;}
   const fee=parseInt(document.getElementById('feeIn').value)||D.fee;
 
-  // ── PLACEHOLDER OFFER LOGIC (to be replaced) ──
-  let pFee;
-  if(fee<=1000)pFee=fee;
-  else if(fee<=2000)pFee=Math.round(fee*.88);
-  else if(fee<=4000)pFee=Math.round(fee*.82);
-  else if(fee<=8000)pFee=Math.round(fee*.76);
-  else pFee=Math.round(fee*.70);
-  // ──────────────────────────────────────────────
+  // Three-tier pricing with rounding to nearest €50
+  let disc = fee < 1500 ? 0.10 : fee < 3000 ? 0.15 : 0.20;
+  let pFee = Math.floor(fee * (1 - disc) / 50) * 50;
 
   const mSav=fee-pFee;
   const aSav=mSav*12;
@@ -518,7 +493,6 @@ function showRes(){
       rating_speed: D.ratings.speed,
       rating_human: D.ratings.human,
       rating_performance: D.ratings.perf,
-      improvement_notes: document.getElementById('improveBox').value.trim(),
       // Calculated results
       prime_fee: '€'+pFee.toLocaleString('nl-NL'),
       monthly_saving: '€'+mSav.toLocaleString('nl-NL'),
