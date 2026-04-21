@@ -163,11 +163,28 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
 .nxt{background:#FF4A01;border:none;border-radius:50px;padding:14px 36px;font-size:15px;font-weight:800;cursor:pointer;color:#fff;transition:all .2s;box-shadow:0 4px 20px rgba(255,74,1,.35);flex:1;font-family:inherit}
 .nxt:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(255,74,1,.5)}
 
+/* ── TESTIMONIALS ── */
+.testimonial-section{padding:80px 0 60px;overflow:hidden;text-align:center}
+.testimonial-title{font-family:'Safiro',sans-serif;font-size:clamp(28px,4vw,42px);font-weight:800;color:#fff;margin-bottom:48px}
+.carousel-wrapper{position:relative;overflow:hidden;width:100%;max-width:100vw}
+.carousel-track{display:flex;gap:24px;transition:transform 0.6s ease;padding:40px 0;will-change:transform}
+.testimonial-card{min-width:380px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:32px;flex-shrink:0;display:flex;flex-direction:column;justify-content:space-between;min-height:320px}
+.stars{color:#FF4A01;font-size:22px;letter-spacing:2px;margin-bottom:20px}
+.review-text{font-family:'Stabil Grotesk',sans-serif;color:rgba(255,255,255,.8);font-size:15px;line-height:1.7;margin-bottom:24px;flex:1}
+.reviewer-info{text-align:left;border-top:1px solid rgba(255,255,255,.08);padding-top:16px}
+.reviewer-name{display:block;color:#fff;font-weight:600;font-size:14px;margin-bottom:4px}
+.reviewer-company{display:block;color:rgba(255,255,255,.5);font-size:13px}
+.carousel-fade-left,.carousel-fade-right{position:absolute;top:0;width:220px;height:100%;pointer-events:none;z-index:2}
+.carousel-fade-left{left:0;background:linear-gradient(to right,#060519,transparent)}
+.carousel-fade-right{right:0;background:linear-gradient(to left,#060519,transparent)}
+
 @media(max-width:580px){
   .rgrid,.frow{grid-template-columns:1fr}
   .fgrid{grid-template-columns:repeat(2,1fr)}
   .qhdr{padding:14px 18px}
   .step{padding:40px 16px 64px}
+  .testimonial-card{min-width:calc(100vw - 48px);padding:24px}
+  .carousel-wrapper{margin:0 -24px}
 }
 </style>
 </head>
@@ -184,6 +201,16 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
   <h1>Find out how much you're <span>overpaying</span> for marketing</h1>
   <p>Answer a few quick questions about your current setup and get an instant personalised savings overview.</p>
   <button class="hero-cta" onclick="startQuiz()">See what you can save →</button>
+
+  <!-- ═══ TESTIMONIALS ═══ -->
+  <section class="testimonial-section">
+    <h2 class="testimonial-title">What our clients say about us</h2>
+    <div class="carousel-wrapper">
+      <div class="carousel-fade-left"></div>
+      <div class="carousel-track" id="carouselTrack"></div>
+      <div class="carousel-fade-right"></div>
+    </div>
+  </section>
 </div>
 
 <!-- ═══ QUIZ ═══ -->
@@ -353,6 +380,44 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
 </div>
 
 <script>
+// ═══ TESTIMONIALS ═══
+const testimonials = [
+  { name: "Sophie van den Berg", company: "Bloom Digital", text: "We were paying nearly €4.000/month to our agency and barely saw results. After using this tool we realised we were 22% overpaying. Switching saved us over €800/month." },
+  { name: "Liam O'Connor", company: "GrowthStack", text: "The transparency this calculator gives you is remarkable. We restructured our entire agency contract based on what we learned here. 10/10 would recommend." },
+  { name: "Marta Kowalski", company: "NordBrand", text: "Finally a tool that shows the real picture. Our agency fees seemed reasonable until we benchmarked them — now we negotiate from a position of knowledge." },
+  { name: "Tom Hartmann", company: "Velocity Labs", text: "Straightforward and eye-opening. We completed the quiz in under 2 minutes and walked away with a clear action plan. Great product." },
+  { name: "Isabelle Renard", company: "LumiMedia", text: "As a CMO I've always suspected we weren't getting full value from our agency spend. This confirmed it with data. Saved us €1.200/month on the first renegotiation." }
+];
+
+const track = document.getElementById('carouselTrack');
+[...testimonials, ...testimonials].forEach(t => {
+  track.innerHTML += `<div class="testimonial-card">
+    <div class="stars">★★★★★</div>
+    <p class="review-text">"${t.text}"</p>
+    <div class="reviewer-info">
+      <span class="reviewer-name">${t.name}</span>
+      <span class="reviewer-company">${t.company}</span>
+    </div>
+  </div>`;
+});
+
+let carIdx = 0;
+const cardW = 380 + 24;
+const totalCards = testimonials.length;
+setInterval(() => {
+  carIdx++;
+  if (carIdx >= totalCards) {
+    setTimeout(() => {
+      track.style.transition = 'none';
+      carIdx = 0;
+      track.style.transform = `translateX(calc(-${carIdx * cardW}px + 50% - 190px))`;
+      setTimeout(() => track.style.transition = 'transform 0.6s ease', 50);
+    }, 650);
+  }
+  track.style.transform = `translateX(calc(-${carIdx * cardW}px + 50% - 190px))`;
+}, 3500);
+
+// ═══ QUIZ DATA ═══
 const D={platforms:[],services:[],spend:{},fee:0,ratings:{speed:0,human:0,perf:0},improve:''};
 const pNames={linkedin:'LinkedIn Ads',google:'Google Ads',meta:'Meta Ads',reddit:'Reddit Ads',tiktok:'TikTok Ads'};
 const sNames={copy:'Copywriting',design:'Ad design',video:'Video creation',videoedit:'Video editing',landing:'Landing page creation'};
