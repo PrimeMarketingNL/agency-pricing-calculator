@@ -58,18 +58,22 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
 .prog-fill{background:#FF4A01;height:100%;border-radius:8px;transition:width .45s ease}
 .prog-txt{font-size:11px;color:rgba(255,255,255,.35);margin-top:5px;text-align:right;font-weight:500}
 
+.step-progress{display:flex;align-items:center;gap:16px;max-width:900px;margin:28px auto 0;padding:0 40px}
+.step-progress .prog-lbl{font-size:12px;font-weight:700;color:rgba(255,255,255,.45);white-space:nowrap}
+.step-progress .prog-bg{flex:1}
+
 /* ── STEPS ── */
-.step{display:none;max-width:640px;margin:0 auto;padding:56px 24px 80px;text-align:center}
+.step{display:none;max-width:900px;margin:0 auto;padding:56px 40px 80px;text-align:center}
 .step.active{display:block}
-.slabel{font-size:11px;font-weight:700;color:#FF895B;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px}
-.step h2{font-size:clamp(22px,3.5vw,30px);font-weight:800;line-height:1.2;margin-bottom:8px;color:#fff}
+.slabel{font-size:12px;font-weight:700;color:#FF895B;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px}
+.step h2{font-size:clamp(26px,4vw,36px);font-weight:800;line-height:1.2;margin-bottom:8px;color:#fff}
 .step .sub{font-size:14px;color:rgba(255,255,255,.45);margin-bottom:32px}
 
 /* ── CARDS / INPUTS ── */
 .gcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:20px 24px;backdrop-filter:blur(8px)}
 
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px;margin-bottom:40px}
-.pbtn{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:13px;padding:15px 18px;font-size:14px;font-weight:600;color:rgba(255,255,255,.75);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:10px;font-family:inherit}
+.pgrid{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:40px}
+.pbtn{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:13px;padding:22px 24px;font-size:16px;font-weight:600;color:rgba(255,255,255,.75);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:10px;font-family:inherit;min-width:200px;flex:0 1 auto}
 .pbtn:hover{border-color:rgba(255,74,1,.5);background:rgba(255,74,1,.08)}
 .pbtn.sel{border-color:#FF4A01;background:rgba(255,74,1,.15);color:#fff}
 .pcheck{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all .18s;color:transparent}
@@ -83,6 +87,11 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
 .einput span{color:rgba(255,255,255,.35);font-weight:700;font-size:14px}
 .einput input{border:none;background:transparent;font-size:15px;font-weight:700;width:110px;outline:none;color:#fff;font-family:inherit}
 .einput input::placeholder{color:rgba(255,255,255,.18)}
+
+.dselect{display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 14px;transition:border-color .18s}
+.dselect:focus-within{border-color:#FF4A01}
+.dselect select{border:none;background:transparent;font-size:15px;font-weight:700;outline:none;color:#fff;font-family:inherit;cursor:pointer}
+.dselect select option{background:#060519;color:#fff}
 
 .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
 .fpbtn{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 8px;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.7);cursor:pointer;transition:all .18s;font-family:inherit}
@@ -183,11 +192,11 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
     <div class="prime-logo">
       <img src="Logo/Icon logo.png" alt="Prime" style="height:36px;width:auto">
     </div>
-    <div class="prog-wrap">
-      <div class="prog-bg"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
-      <div class="prog-txt" id="pTxt">Step 1 of 7</div>
-    </div>
-    <div style="width:80px"></div>
+  </div>
+
+  <div class="step-progress">
+    <span class="prog-lbl" id="pTxt">Step 1 of 7</span>
+    <div class="prog-bg"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
   </div>
 
   <!-- S1 -->
@@ -416,9 +425,14 @@ function toggleS(btn,id){
 function buildSpend(){
   const c=document.getElementById('spendList');c.innerHTML='';
   if(!D.platforms.length){c.innerHTML='<p style="color:rgba(255,255,255,.3);padding:16px 0">Please go back and select at least one platform.</p>';return;}
+  const ranges=[{label:'Select range',value:0},{label:'€0 – €500',value:250},{label:'€500 – €1,000',value:750},{label:'€1,000 – €2,500',value:1750},{label:'€2,500 – €5,000',value:3750},{label:'€5,000 – €10,000',value:7500},{label:'€10,000+',value:10000}];
   D.platforms.forEach(p=>{
     const r=document.createElement('div');r.className='srow';
-    r.innerHTML=`<label>${pNames[p]}</label><div class="einput"><span>€</span><input type="number" placeholder="0" value="${D.spend[p]||''}" oninput="D.spend['${p}']=parseInt(this.value)||0"></div>`;
+    const sel=document.createElement('select');
+    sel.onchange=e=>D.spend[p]=parseInt(e.target.value);
+    ranges.forEach(rng=>{const o=document.createElement('option');o.value=rng.value;o.textContent=rng.label;if(D.spend[p]==rng.value)o.selected=true;sel.appendChild(o);});
+    const d=document.createElement('div');d.className='dselect';d.appendChild(sel);
+    r.innerHTML=`<label>${pNames[p]}</label>`;r.appendChild(d);
     c.appendChild(r);
   });
 }
