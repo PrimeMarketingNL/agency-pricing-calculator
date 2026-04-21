@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing Savings Calculator — Prime</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',-apple-system,sans-serif;
+  min-height:100vh;
+  color:#fff;
+  background:
+    radial-gradient(ellipse at 85% 100%, #A53103 0%, transparent 45%),
+    radial-gradient(ellipse at 15% 95%, #760A05 0%, transparent 38%),
+    radial-gradient(ellipse at 50% 20%, #1E187C 0%, transparent 55%),
+    #060519;
+  background-attachment:fixed;
+}
+
+/* ── LOGO SVG ── */
+.prime-logo{display:flex;align-items:center;gap:10px}
+.prime-logo svg{width:28px;height:28px}
+.prime-logo span{font-size:16px;font-weight:800;letter-spacing:-.3px}
+
+/* ── LANDING ── */
+#landing{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 24px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,74,1,.12);border:1px solid rgba(255,74,1,.35);border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;color:#FF895B;margin-bottom:32px}
+#landing h1{font-size:clamp(36px,6vw,72px);font-weight:900;line-height:1.06;max-width:820px;margin-bottom:22px;color:#fff}
+#landing h1 span{color:#FF4A01}
+#landing p{font-size:clamp(16px,2vw,19px);color:rgba(255,255,255,.6);max-width:500px;margin-bottom:44px;line-height:1.65}
+.hero-cta{background:#FF4A01;color:#fff;border:none;padding:20px 52px;font-size:18px;font-weight:800;border-radius:50px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 32px rgba(255,74,1,.4);letter-spacing:.2px;font-family:inherit}
+.hero-cta:hover{transform:translateY(-3px);box-shadow:0 14px 44px rgba(255,74,1,.55)}
+
+/* ── QUIZ SHELL ── */
+#quiz{display:none;min-height:100vh}
+.qhdr{padding:16px 32px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:10;background:rgba(6,5,25,.7);backdrop-filter:blur(16px)}
+.prog-wrap{flex:1;max-width:440px}
+.prog-bg{background:rgba(255,255,255,.1);border-radius:8px;height:4px;overflow:hidden}
+.prog-fill{background:#FF4A01;height:100%;border-radius:8px;transition:width .45s ease}
+.prog-txt{font-size:11px;color:rgba(255,255,255,.35);margin-top:5px;text-align:right;font-weight:500}
+
+/* ── STEPS ── */
+.step{display:none;max-width:640px;margin:0 auto;padding:56px 24px 80px;text-align:center}
+.step.active{display:block}
+.slabel{font-size:11px;font-weight:700;color:#FF895B;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px}
+.step h2{font-size:clamp(22px,3.5vw,30px);font-weight:800;line-height:1.2;margin-bottom:8px;color:#fff}
+.step .sub{font-size:14px;color:rgba(255,255,255,.45);margin-bottom:32px}
+
+/* ── CARDS / INPUTS ── */
+.gcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:20px 24px;backdrop-filter:blur(8px)}
+
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px;margin-bottom:40px}
+.pbtn{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:13px;padding:15px 18px;font-size:14px;font-weight:600;color:rgba(255,255,255,.75);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:10px;font-family:inherit}
+.pbtn:hover{border-color:rgba(255,74,1,.5);background:rgba(255,74,1,.08)}
+.pbtn.sel{border-color:#FF4A01;background:rgba(255,74,1,.15);color:#fff}
+.pcheck{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all .18s;color:transparent}
+.pbtn.sel .pcheck{background:#FF4A01;border-color:#FF4A01;color:#fff}
+
+.slist{display:flex;flex-direction:column;gap:12px;margin-bottom:40px}
+.srow{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.srow label{font-weight:600;font-size:14px;color:rgba(255,255,255,.85);text-align:left}
+.einput{display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.12);border-radius:9px;padding:10px 14px;transition:border-color .18s}
+.einput:focus-within{border-color:#FF4A01}
+.einput span{color:rgba(255,255,255,.35);font-weight:700;font-size:14px}
+.einput input{border:none;background:transparent;font-size:15px;font-weight:700;width:110px;outline:none;color:#fff;font-family:inherit}
+.einput input::placeholder{color:rgba(255,255,255,.18)}
+
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.fpbtn{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 8px;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.7);cursor:pointer;transition:all .18s;font-family:inherit}
+.fpbtn:hover,.fpbtn.sel{border-color:#FF4A01;background:rgba(255,74,1,.15);color:#fff}
+.fee-manual{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:40px}
+.fee-manual label{font-weight:600;font-size:14px;color:rgba(255,255,255,.6)}
+
+.rqs{display:flex;flex-direction:column;gap:20px;margin-bottom:40px}
+.rq{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:22px;text-align:left}
+.rq p{font-weight:600;font-size:14px;margin-bottom:14px;line-height:1.5;color:rgba(255,255,255,.9)}
+.rq p span{color:rgba(255,255,255,.35);font-weight:400}
+.rbts{display:flex;gap:6px;flex-wrap:wrap}
+.rbtn{width:38px;height:38px;border-radius:8px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:13px;font-weight:700;cursor:pointer;transition:all .18s;color:rgba(255,255,255,.6);font-family:inherit}
+.rbtn:hover{border-color:#FF4A01;color:#fff}
+.rbtn.sel{background:#FF4A01;border-color:#FF4A01;color:#fff}
+
+.btarea{width:100%;border:1.5px solid rgba(255,255,255,.12);border-radius:13px;padding:16px;font-size:14px;font-family:inherit;resize:vertical;min-height:140px;outline:none;transition:border-color .18s;background:rgba(255,255,255,.05);margin-bottom:40px;line-height:1.6;color:#fff}
+.btarea::placeholder{color:rgba(255,255,255,.22)}
+.btarea:focus{border-color:#FF4A01}
+
+.lform{display:flex;flex-direction:column;gap:14px;margin-bottom:40px;text-align:left}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ff{display:flex;flex-direction:column;gap:5px}
+.ff label{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.6px}
+.ff input{border:1.5px solid rgba(255,255,255,.12);border-radius:10px;padding:13px 15px;font-size:14px;outline:none;transition:border-color .18s;font-family:inherit;background:rgba(255,255,255,.05);font-weight:500;color:#fff}
+.ff input::placeholder{color:rgba(255,255,255,.18)}
+.ff input:focus{border-color:#FF4A01}
+
+/* ── RESULTS ── */
+.res-hero{text-align:center;margin-bottom:36px}
+.res-hero h2{font-size:clamp(24px,4vw,34px);font-weight:900;line-height:1.15;color:#fff}
+.stag{display:inline-block;background:#FF4A01;color:#fff;border-radius:50px;padding:8px 22px;font-size:13px;font-weight:700;margin-top:12px;box-shadow:0 4px 20px rgba(255,74,1,.4)}
+
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+.rcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:26px;text-align:left}
+.rcard.hi{border-color:rgba(255,74,1,.4);background:rgba(255,74,1,.1)}
+.rcard .clabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:14px}
+.rcard.hi .clabel{color:#FF895B}
+.rcard .bnum{font-size:36px;font-weight:900;color:#fff;margin-bottom:10px}
+.rcard.hi .bnum{color:#FF4A01}
+.rcard .brkd{font-size:13px;color:rgba(255,255,255,.4);line-height:2}
+.rcard .brkd strong{color:rgba(255,255,255,.6)}
+
+.sbanner{background:rgba(255,74,1,.1);border:1px solid rgba(255,74,1,.25);border-radius:16px;padding:32px;text-align:center;margin-bottom:28px}
+.sbanner .slbl{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:8px;font-weight:500}
+.sbanner .snum{font-size:clamp(40px,6vw,56px);font-weight:900;color:#FF4A01;letter-spacing:-1px}
+.sbanner .ssub{font-size:13px;color:rgba(255,255,255,.35);margin-top:8px}
+
+/* ── BENEFITS ── */
+.benefits-card{background:rgba(59,48,248,.1);border:1px solid rgba(59,48,248,.25);border-radius:16px;padding:28px;margin-bottom:28px;text-align:left}
+.benefits-card h3{font-size:16px;font-weight:800;color:#fff;margin-bottom:6px}
+.benefits-card .bsub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:20px}
+.benefit-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.benefit-item:last-child{margin-bottom:0}
+.bcheck{width:22px;height:22px;border-radius:50%;background:#FF4A01;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:11px}
+.benefit-item p{font-size:14px;color:rgba(255,255,255,.85);line-height:1.5;font-weight:500}
+.benefit-item p strong{color:#fff}
+.your-words{background:rgba(255,255,255,.05);border-left:3px solid #FF4A01;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:6px;font-size:12px;color:rgba(255,255,255,.5);font-style:italic;line-height:1.5}
+
+.placeholder-note{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:12px 16px;font-size:12px;color:rgba(251,191,36,.7);margin-bottom:24px;line-height:1.5;text-align:left}
+.claim-btn{background:#FF4A01;color:#fff;border:none;padding:20px;font-size:18px;font-weight:800;border-radius:14px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 28px rgba(255,74,1,.4);width:100%;font-family:inherit;letter-spacing:.3px}
+.claim-btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(255,74,1,.55)}
+.claim-sub{margin-top:12px;color:rgba(255,255,255,.35);font-size:12px;text-align:center}
+
+/* ── NAV ── */
+.nav{display:flex;gap:12px;align-items:center}
+.nbk{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:50px;padding:13px 26px;font-size:14px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.55);transition:all .18s;font-family:inherit}
+.nbk:hover{background:rgba(255,255,255,.1);color:#fff}
+.nxt{background:#FF4A01;border:none;border-radius:50px;padding:14px 36px;font-size:15px;font-weight:800;cursor:pointer;color:#fff;transition:all .2s;box-shadow:0 4px 20px rgba(255,74,1,.35);flex:1;font-family:inherit}
+.nxt:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(255,74,1,.5)}
+
+@media(max-width:580px){
+  .rgrid,.frow{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:repeat(2,1fr)}
+  .qhdr{padding:14px 18px}
+  .step{padding:40px 16px 64px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LANDING ═══ -->
+<div id="landing">
+  <div class="badge">🚀 Free — takes less than 2 minutes</div>
+  <h1>Find out how much you're <span>overpaying</span> for marketing</h1>
+  <p>Answer a few quick questions about your current setup and get an instant personalised savings overview.</p>
+  <button class="hero-cta" onclick="startQuiz()">See what you can save →</button>
+</div>
+
+<!-- ═══ QUIZ ═══ -->
+<div id="quiz">
+  <div class="qhdr">
+    <div class="prime-logo">
+      <svg viewBox="0 0 40 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 0L38 10V30L20 40L2 30V10L20 0Z" fill="url(#lg)"/>
+        <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="18" font-weight="900" font-family="Inter">P</text>
+        <defs><linearGradient id="lg" x1="2" y1="0" x2="38" y2="44" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3B30F8"/><stop offset="100%" stop-color="#FF4A01"/></linearGradient></defs>
+      </svg>
+      <span>Prime</span>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-bg"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+      <div class="prog-txt" id="pTxt">Step 1 of 7</div>
+    </div>
+    <div style="width:80px"></div>
+  </div>
+
+  <!-- S1 -->
+  <div class="step" id="s1">
+    <div class="slabel">Step 1 of 7</div>
+    <h2>What ad platforms do you currently outsource?</h2>
+    <p class="sub">Select all that apply.</p>
+    <div class="pgrid">
+      <button class="pbtn" onclick="toggleP(this,'linkedin')"><div class="pcheck">✓</div>LinkedIn Ads</button>
+      <button class="pbtn" onclick="toggleP(this,'google')"><div class="pcheck">✓</div>Google Ads</button>
+      <button class="pbtn" onclick="toggleP(this,'meta')"><div class="pcheck">✓</div>Meta Ads</button>
+      <button class="pbtn" onclick="toggleP(this,'reddit')"><div class="pcheck">✓</div>Reddit Ads</button>
+      <button class="pbtn" onclick="toggleP(this,'tiktok')"><div class="pcheck">✓</div>TikTok Ads</button>
+    </div>
+    <div class="nav"><button class="nxt" onclick="goNext1()">Continue →</button></div>
+  </div>
+
+  <!-- S1b: Services -->
+  <div class="step" id="s1b">
+    <div class="slabel">Step 2 of 8</div>
+    <h2>What services does your agency cover?</h2>
+    <p class="sub">Select all that apply.</p>
+    <div class="pgrid">
+      <button class="pbtn" onclick="toggleS(this,'copy')"><div class="pcheck">✓</div>Copywriting</button>
+      <button class="pbtn" onclick="toggleS(this,'design')"><div class="pcheck">✓</div>Ad design</button>
+      <button class="pbtn" onclick="toggleS(this,'video')"><div class="pcheck">✓</div>Video creation</button>
+      <button class="pbtn" onclick="toggleS(this,'videoedit')"><div class="pcheck">✓</div>Video editing</button>
+      <button class="pbtn" onclick="toggleS(this,'landing')"><div class="pcheck">✓</div>Landing page creation</button>
+    </div>
+    <div class="nav">
+      <button class="nbk" onclick="go(1)">← Back</button>
+      <button class="nxt" onclick="goNext1b()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- S2 -->
+  <div class="step" id="s2">
+    <div class="slabel">Step 3 of 8</div>
+    <h2>What is your monthly ad spend per platform?</h2>
+    <p class="sub">Fill in your approximate monthly budget for each platform.</p>
+    <div class="slist" id="spendList"></div>
+    <div class="nav">
+      <button class="nbk" onclick="go('1b')">← Back</button>
+      <button class="nxt" onclick="goNext2()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- S3 -->
+  <div class="step" id="s3">
+    <div class="slabel">Step 4 of 8</div>
+    <h2>What agency fee are you paying monthly?</h2>
+    <p class="sub">Management fee only — not the ad spend.</p>
+    <div class="fgrid">
+      <button class="fpbtn" onclick="setFee(this,750)">Less than €1,000</button>
+      <button class="fpbtn" onclick="setFee(this,1250)">€1,000 – €1,500</button>
+      <button class="fpbtn" onclick="setFee(this,2250)">€1,500 – €3,000</button>
+      <button class="fpbtn" onclick="setFee(this,4000)">€3,000 – €5,000</button>
+      <button class="fpbtn" onclick="setFee(this,7500)">€5,000 – €10,000</button>
+      <button class="fpbtn" onclick="setFee(this,12000)">€10,000+</button>
+    </div>
+    <div class="fee-manual">
+      <label>Or enter exact amount:</label>
+      <div class="einput"><span>€</span><input type="number" id="feeIn" placeholder="0" oninput="clearFP()"></div>
+    </div>
+    <div class="nav">
+      <button class="nbk" onclick="go(2)">← Back</button>
+      <button class="nxt" onclick="goNext3()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- S4 -->
+  <div class="step" id="s4">
+    <div class="slabel">Step 5 of 8</div>
+    <h2>How is your current agency performing?</h2>
+    <p class="sub">Rate each on a scale from 1 to 10.</p>
+    <div class="rqs">
+      <div class="rq">
+        <p>How would you rate your agency on delivery speed? <span>(10 = next day, 1 = one month or more)</span></p>
+        <div class="rbts" id="r-speed"></div>
+      </div>
+      <div class="rq">
+        <p>How human does the agency feel in contact and reporting?</p>
+        <div class="rbts" id="r-human"></div>
+      </div>
+      <div class="rq">
+        <p>How would you rate their overall performance?</p>
+        <div class="rbts" id="r-perf"></div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="nbk" onclick="go(3)">← Back</button>
+      <button class="nxt" onclick="goNext4()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- S5 -->
+  <div class="step" id="s5">
+    <div class="slabel">Step 6 of 8</div>
+    <h2>How could this become a 10?</h2>
+    <p class="sub">What would make your agency experience perfect? Be as specific as you'd like.</p>
+    <textarea class="btarea" id="improveBox" placeholder="e.g. Faster reporting, more proactive communication, better results on LinkedIn..."></textarea>
+    <div class="nav">
+      <button class="nbk" onclick="go(4)">← Back</button>
+      <button class="nxt" onclick="go(6)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- S6 -->
+  <div class="step" id="s6">
+    <div class="slabel">Step 7 of 8</div>
+    <h2>See if you're paying industry standard — and how much you can save.</h2>
+    <p class="sub">Your personalised breakdown is one step away.</p>
+    <div class="lform">
+      <div class="frow">
+        <div class="ff"><label>First name *</label><input type="text" id="fn" placeholder="Anna"></div>
+        <div class="ff"><label>Last name *</label><input type="text" id="ln" placeholder="de Vries"></div>
+      </div>
+      <div class="ff"><label>Company *</label><input type="text" id="co" placeholder="Acme B.V."></div>
+      <div class="ff"><label>Email *</label><input type="email" id="em" placeholder="anna@acme.nl"></div>
+      <div class="ff"><label>Phone <span style="color:rgba(255,255,255,.2);text-transform:none;font-size:11px">(optional)</span></label><input type="tel" id="ph" placeholder="+31 6 12 34 56 78"></div>
+    </div>
+    <div class="nav">
+      <button class="nbk" onclick="go(5)">← Back</button>
+      <button class="nxt" onclick="showRes()">Show my savings →</button>
+    </div>
+  </div>
+
+  <!-- S7: Results -->
+  <div class="step" id="s7">
+    <div class="slabel">Step 8 of 8 — Your personalised overview</div>
+    <div class="res-hero">
+      <h2>Here's what you're currently paying</h2>
+      <div class="stag" id="stag">You could save €—/month</div>
+    </div>
+    <div class="rgrid">
+      <div class="rcard">
+        <div class="clabel">Current agency fee</div>
+        <div class="bnum" id="curFee">€—</div>
+        <div class="brkd" id="curBrkd"></div>
+      </div>
+      <div class="rcard hi">
+        <div class="clabel">Prime Marketing fee</div>
+        <div class="bnum" id="primeFee">€—</div>
+        <div class="brkd" id="primeBrkd"></div>
+      </div>
+    </div>
+    <div class="sbanner">
+      <div class="slbl">Estimated annual savings on management fees</div>
+      <div class="snum" id="annSav">€—</div>
+      <div class="ssub">Based on the information you provided</div>
+    </div>
+
+    <!-- Personalised benefits -->
+    <div class="benefits-card">
+      <h3>What you get with Prime</h3>
+      <p class="bsub">Based on your answers, here's what we'd fix from day one.</p>
+      <div id="benefitsList"></div>
+    </div>
+
+    <div class="placeholder-note">⚠️ <strong>Internal note:</strong> Offer calculation uses a placeholder formula — to be updated with agreed pricing logic.</div>
+    <button class="claim-btn" onclick="window.open('https://calendly.com','_blank')">CLAIM YOUR OFFER →</button>
+    <p class="claim-sub">Book a free 30-minute strategy call. No obligations.</p>
+  </div>
+</div>
+
+<script>
+const D={platforms:[],services:[],spend:{},fee:0,ratings:{speed:0,human:0,perf:0},improve:''};
+const pNames={linkedin:'LinkedIn Ads',google:'Google Ads',meta:'Meta Ads',reddit:'Reddit Ads',tiktok:'TikTok Ads'};
+const sNames={copy:'Copywriting',design:'Ad design',video:'Video creation',videoedit:'Video editing',landing:'Landing page creation'};
+
+['speed','human','perf'].forEach(k=>{
+  const el=document.getElementById('r-'+k);
+  for(let i=1;i<=10;i++){
+    const b=document.createElement('button');
+    b.className='rbtn';b.textContent=i;
+    b.onclick=()=>{el.querySelectorAll('.rbtn').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');D.ratings[k]=i;};
+    el.appendChild(b);
+  }
+});
+
+function err(msg){
+  let t=document.getElementById('errToast');
+  if(!t){t=document.createElement('div');t.id='errToast';t.style.cssText='position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#FF4A01;color:#fff;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:700;z-index:999;box-shadow:0 4px 20px rgba(255,74,1,.5);transition:opacity .3s';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2800);
+}
+
+function goNext1(){
+  if(!D.platforms.length){err('Please select at least one platform.');return;}
+  go('1b');
+}
+function goNext1b(){
+  if(!D.services.length){err('Please select at least one service.');return;}
+  go(2);
+}
+function goNext2(){
+  const empty=D.platforms.filter(p=>!D.spend[p]||D.spend[p]<=0);
+  if(empty.length){err('Please fill in the spend for every platform.');return;}
+  go(3);
+}
+function goNext3(){
+  const fee=parseInt(document.getElementById('feeIn').value)||D.fee;
+  if(!fee||fee<=0){err('Please enter or select your monthly agency fee.');return;}
+  D.fee=fee;go(4);
+}
+function goNext4(){
+  const{speed,human,perf}=D.ratings;
+  if(!speed||!human||!perf){err('Please rate all three areas.');return;}
+  go(5);
+}
+
+function startQuiz(){document.getElementById('landing').style.display='none';document.getElementById('quiz').style.display='block';go(1);}
+
+const stepOrder=[1,'1b',2,3,4,5,6,7];
+function go(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  const idx=stepOrder.indexOf(n);
+  const pct=Math.round((idx/7)*100);
+  document.getElementById('pFill').style.width=pct+'%';
+  const display=idx+1;
+  document.getElementById('pTxt').textContent='Step '+display+' of 8';
+  if(n===2)buildSpend();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleP(btn,id){
+  btn.classList.toggle('sel');
+  D.platforms=D.platforms.includes(id)?D.platforms.filter(p=>p!==id):[...D.platforms,id];
+}
+
+function toggleS(btn,id){
+  btn.classList.toggle('sel');
+  D.services=D.services.includes(id)?D.services.filter(s=>s!==id):[...D.services,id];
+}
+
+function buildSpend(){
+  const c=document.getElementById('spendList');c.innerHTML='';
+  if(!D.platforms.length){c.innerHTML='<p style="color:rgba(255,255,255,.3);padding:16px 0">Please go back and select at least one platform.</p>';return;}
+  D.platforms.forEach(p=>{
+    const r=document.createElement('div');r.className='srow';
+    r.innerHTML=`<label>${pNames[p]}</label><div class="einput"><span>€</span><input type="number" placeholder="0" value="${D.spend[p]||''}" oninput="D.spend['${p}']=parseInt(this.value)||0"></div>`;
+    c.appendChild(r);
+  });
+}
+
+function setFee(btn,v){
+  document.querySelectorAll('.fpbtn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');document.getElementById('feeIn').value=v;D.fee=v;
+}
+function clearFP(){document.querySelectorAll('.fpbtn').forEach(b=>b.classList.remove('sel'));D.fee=parseInt(document.getElementById('feeIn').value)||0;}
+
+function fmt(n){return'€'+n.toLocaleString('nl-NL')}
+
+function buildBenefits(){
+  const {speed,human,perf}=D.ratings;
+  const improve=document.getElementById('improveBox').value.trim();
+  const items=[];
+
+  // Always included
+  items.push({title:'Hyper-specialist in Google Ads & LinkedIn Ads',body:'Not a generalist agency. We live and breathe the platforms you\'re running.'});
+  items.push({title:'Transparent reporting with clear ROI',body:'Monthly dashboards built for decision-makers — no fluff, no vanity metrics.'});
+
+  // Conditional on ratings
+  if(speed>0&&speed<7) items.push({title:'Next-day turnaround as standard',body:'Our average response time on changes and creatives is under 24 hours.'});
+  if(human>0&&human<7) items.push({title:'A real person, always reachable',body:'Direct contact with your strategist — no tickets, no account managers in between.'});
+  if(perf>0&&perf<7) items.push({title:'Performance-led optimisation every week',body:'Campaigns are actively managed and optimised — not set and forgotten.'});
+
+  // Average score badge
+  const scores=[speed,human,perf].filter(s=>s>0);
+  if(scores.length&&(scores.reduce((a,b)=>a+b,0)/scores.length)<6){
+    items.push({title:'A fresh start with a team that cares',body:'Based on your ratings, your current agency is underperforming. We\'ll make it right from day one.'});
+  }
+
+  // From their own words
+  if(improve){
+    items.push({title:'We heard you',body:null,quote:improve});
+  }
+
+  const container=document.getElementById('benefitsList');
+  container.innerHTML='';
+  items.forEach(item=>{
+    const div=document.createElement('div');
+    div.className='benefit-item';
+    div.innerHTML=`
+      <div class="bcheck">✓</div>
+      <div>
+        <p><strong>${item.title}</strong>${item.body?'<br>'+item.body:''}</p>
+        ${item.quote?`<div class="your-words">"${item.quote}"</div>`:''}
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function showRes(){
+  const fn=document.getElementById('fn').value.trim();
+  const ln=document.getElementById('ln').value.trim();
+  const co=document.getElementById('co').value.trim();
+  const em=document.getElementById('em').value.trim();
+  if(!fn){err('Please enter your first name.');return;}
+  if(!ln){err('Please enter your last name.');return;}
+  if(!co){err('Please enter your company name.');return;}
+  if(!em||!em.includes('@')){err('Please enter a valid email address.');return;}
+  const fee=parseInt(document.getElementById('feeIn').value)||D.fee;
+
+  // ── PLACEHOLDER OFFER LOGIC (to be replaced) ──
+  let pFee;
+  if(fee<=1000)pFee=fee;
+  else if(fee<=2000)pFee=Math.round(fee*.88);
+  else if(fee<=4000)pFee=Math.round(fee*.82);
+  else if(fee<=8000)pFee=Math.round(fee*.76);
+  else pFee=Math.round(fee*.70);
+  // ──────────────────────────────────────────────
+
+  const mSav=fee-pFee;
+  const aSav=mSav*12;
+
+  document.getElementById('curFee').textContent=fmt(fee);
+  document.getElementById('curBrkd').innerHTML=`<strong>Per month</strong><br>Across ${D.platforms.length} platform${D.platforms.length!==1?'s':''}`;
+  document.getElementById('primeFee').textContent=fmt(pFee);
+  document.getElementById('primeBrkd').innerHTML=`<strong>Per month</strong><br>Same platforms, better results`;
+  document.getElementById('stag').textContent=`You could save ${fmt(mSav)}/month`;
+  document.getElementById('annSav').textContent=fmt(aSav);
+
+  buildBenefits();
+
+  // ── SEND TO ZAPIER ──
+  fetch('https://hooks.zapier.com/hooks/catch/5717381/ujk63ir/', {
+    method:'POST',
+    mode:'no-cors',
+    body: JSON.stringify({
+      // Lead info
+      first_name: fn,
+      last_name: ln,
+      company: co,
+      email: em,
+      phone: document.getElementById('ph').value.trim()||'',
+      // Platforms & services
+      platforms: D.platforms.join(', '),
+      services: D.services.join(', '),
+      // Spend
+      spend_per_platform: D.platforms.map(p=>`${pNames[p]}: €${D.spend[p]||0}`).join(', '),
+      total_ad_spend: '€'+Object.values(D.spend).reduce((a,b)=>a+b,0).toLocaleString('nl-NL'),
+      // Agency fee & ratings
+      current_agency_fee: '€'+fee.toLocaleString('nl-NL'),
+      rating_speed: D.ratings.speed,
+      rating_human: D.ratings.human,
+      rating_performance: D.ratings.perf,
+      improvement_notes: document.getElementById('improveBox').value.trim(),
+      // Calculated results
+      prime_fee: '€'+pFee.toLocaleString('nl-NL'),
+      monthly_saving: '€'+mSav.toLocaleString('nl-NL'),
+      annual_saving: '€'+aSav.toLocaleString('nl-NL'),
+      // Meta
+      submitted_at: new Date().toISOString(),
+    })
+  }).catch(()=>{}); // silent fail — never block the user
+
+  go(7);
+}
+</script>
+</body>
+</html>
