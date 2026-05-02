@@ -178,6 +178,16 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
 .carousel-fade-left{left:0;background:linear-gradient(to right,#060519,transparent)}
 .carousel-fade-right{right:0;background:linear-gradient(to left,#060519,transparent)}
 
+/* Pain Points Section */
+.pain-section{width:100%;max-width:1100px;margin:80px auto 0;padding:20px}
+.pain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.pain-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:32px 24px;text-align:left;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;cursor:default}
+.pain-card:hover{transform:scale(1.04);border-color:rgba(255,74,1,.25);box-shadow:0 12px 36px rgba(255,74,1,.15)}
+.pain-card h3{font-size:18px;font-weight:700;color:#fff;margin-bottom:12px}
+.pain-card p{font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;margin:0}
+@media(max-width:900px){.pain-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.pain-grid{grid-template-columns:1fr}}
+
 @media(max-width:580px){
   .rgrid,.frow{grid-template-columns:1fr}
   .fgrid{grid-template-columns:repeat(2,1fr)}
@@ -211,6 +221,28 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
       <div class="carousel-fade-right"></div>
     </div>
   </section>
+
+      <!-- ═══ PAIN POINTS ═══ -->
+      <section class="pain-section">
+        <div class="pain-grid">
+          <div class="pain-card">
+            <h3>Pain Point One</h3>
+            <p>Short description of this problem that resonates with the target audience.</p>
+          </div>
+          <div class="pain-card">
+            <h3>Pain Point Two</h3>
+            <p>Short description of this problem that resonates with the target audience.</p>
+          </div>
+          <div class="pain-card">
+            <h3>Pain Point Three</h3>
+            <p>Short description of this problem that resonates with the target audience.</p>
+          </div>
+          <div class="pain-card">
+            <h3>Pain Point Four</h3>
+            <p>Short description of this problem that resonates with the target audience.</p>
+          </div>
+        </div>
+      </section>
 </div>
 
 <!-- ═══ QUIZ ═══ -->

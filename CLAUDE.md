@@ -2,6 +2,22 @@
 
 ---
 
+## User Profile
+
+- **The user is not a developer and has zero coding knowledge.** All explanations, plans, and questions must use plain, non-technical language — no jargon, acronyms, or code snippets in user-facing communication unless absolutely necessary.
+- Always confirm what a change will look like or do in plain terms before implementing it.
+- When asking clarifying questions, phrase them in terms of the end result the user wants to see, not the technical approach.
+- The user's input drives all decisions; never assume technical intent — always verify.
+
+## Security & Code Quality Standards
+
+- All code must follow security best practices at all times: no XSS vulnerabilities, no injection risks, no exposed secrets, no unsafe eval or innerHTML with user-controlled data.
+- Code must be clean, minimal, and free of dead code or unnecessary complexity.
+- Every change must be reviewed by the Code Review Agent before being considered done.
+- If a security concern arises at any point in implementation, stop and resolve it before proceeding.
+
+---
+
 ## Agent Workflow & Supervision Model
 
 ### Role: Supervisor (You)
