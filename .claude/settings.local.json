@@ -4,5 +4,17 @@
       "Bash(git -C \"c:/Users/sveco/Documents/Coding/Agency-pricing-calculator/agency-pricing-calculator\" log --oneline -10)",
       "Bash(python -m http.server 8000)"
     ]
-  }
+  },
+  "disabledMcpjsonServers": [
+    "claude.ai Ahrefs",
+    "claude.ai Apollo.io",
+    "claude.ai Figma",
+    "claude.ai Gmail",
+    "claude.ai Google Calendar",
+    "claude.ai Google Drive",
+    "claude.ai Miro",
+    "claude.ai Notion",
+    "claude.ai Slack",
+    "claude.ai Zapier"
+  ]
 }
