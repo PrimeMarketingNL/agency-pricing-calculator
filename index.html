@@ -178,6 +178,95 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
 .carousel-fade-left{left:0;background:linear-gradient(to right,#060519,transparent)}
 .carousel-fade-right{right:0;background:linear-gradient(to left,#060519,transparent)}
 
+.case-studies-section {
+  padding: 80px 0 60px;
+  overflow: hidden;
+  text-align: center;
+}
+.case-studies-title {
+  font-family: 'Safiro', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 48px;
+}
+.case-carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+.case-carousel-track {
+  display: flex;
+  gap: 24px;
+  transition: transform 0.6s ease;
+  padding: 40px 0;
+  will-change: transform;
+}
+.case-carousel-fade-left,
+.case-carousel-fade-right {
+  position: absolute;
+  top: 0;
+  width: 220px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+.case-carousel-fade-left {
+  left: 0;
+  background: linear-gradient(to right, #060519 0%, transparent 100%);
+}
+.case-carousel-fade-right {
+  right: 0;
+  background: linear-gradient(to left, #060519 0%, transparent 100%);
+}
+.case-card {
+  min-width: 380px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+  text-align: left;
+  flex-shrink: 0;
+  backdrop-filter: blur(8px);
+}
+.case-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.case-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.case-client-name {
+  font-family: 'Safiro', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+.case-stars {
+  color: #FF4A01;
+  font-size: 20px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.case-quote {
+  font-family: 'Stabil Grotesk', sans-serif;
+  color: rgba(255,255,255,.8);
+  font-size: 15px;
+  line-height: 1.7;
+  font-style: italic;
+  flex: 1;
+}
+
 /* Pain Points Section */
 .pain-section{width:100%;max-width:1100px;margin:80px auto 0;padding:20px}
 .pain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
@@ -243,6 +332,15 @@ h1,h2,h3,.step h2,#landing h1{font-family:'Safiro',sans-serif}
           </div>
         </div>
       </section>
+
+        <section class="case-studies-section">
+          <h2 class="case-studies-title">Case studies</h2>
+          <div class="case-carousel-wrapper">
+            <div class="case-carousel-fade-left"></div>
+            <div class="case-carousel-track" id="caseCarouselTrack"></div>
+            <div class="case-carousel-fade-right"></div>
+          </div>
+        </section>
 </div>
 
 <!-- ═══ QUIZ ═══ -->
@@ -447,6 +545,58 @@ setInterval(() => {
     }, 650);
   }
   track.style.transform = `translateX(calc(-${carIdx * cardW}px + 50% - 190px))`;
+}, 3500);
+
+const caseStudies = [
+  {
+    logo: 'Logo/Icon logo.png',
+    name: 'Prime Marketing NL',
+    stars: 5,
+    quote: 'We werken prettig samen met Prime Marketing. We zijn ooit begonnen met LinkedIn ads en later hebben we ook de Google ads aan hen overgedragen. Sindsdien zien we duidelijke verbeteringen in de resultaten.'
+  }
+];
+
+const caseTrack = document.getElementById('caseCarouselTrack');
+[...caseStudies, ...caseStudies, ...caseStudies, ...caseStudies, ...caseStudies, ...caseStudies, ...caseStudies, ...caseStudies].forEach(cs => {
+  const card = document.createElement('div');
+  card.className = 'case-card';
+  const header = document.createElement('div');
+  header.className = 'case-card-header';
+  const img = document.createElement('img');
+  img.className = 'case-logo';
+  img.src = cs.logo;
+  img.alt = cs.name;
+  const nameSpan = document.createElement('span');
+  nameSpan.className = 'case-client-name';
+  nameSpan.textContent = cs.name;
+  header.appendChild(img);
+  header.appendChild(nameSpan);
+  const starsDiv = document.createElement('div');
+  starsDiv.className = 'case-stars';
+  starsDiv.textContent = '★'.repeat(cs.stars);
+  const quoteP = document.createElement('p');
+  quoteP.className = 'case-quote';
+  quoteP.textContent = cs.quote;
+  card.appendChild(header);
+  card.appendChild(starsDiv);
+  card.appendChild(quoteP);
+  caseTrack.appendChild(card);
+});
+
+let caseIndex = 0;
+const caseCardWidth = 380 + 24;
+const totalCaseCards = caseStudies.length;
+setInterval(() => {
+  caseIndex++;
+  if (caseIndex >= totalCaseCards) {
+    setTimeout(() => {
+      caseTrack.style.transition = 'none';
+      caseIndex = 0;
+      caseTrack.style.transform = `translateX(calc(-${caseIndex * caseCardWidth}px + 50% - 190px))`;
+      setTimeout(() => caseTrack.style.transition = 'transform 0.6s ease', 50);
+    }, 650);
+  }
+  caseTrack.style.transform = `translateX(calc(-${caseIndex * caseCardWidth}px + 50% - 190px))`;
 }, 3500);
 
 // ═══ QUIZ DATA ═══
